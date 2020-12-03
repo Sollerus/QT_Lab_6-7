@@ -9,6 +9,14 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+static const QString TASKS_TABLE_NAME = "tasks";
+static const QString EMPLOYEES_TABLE_NAME = "employees";
+static const QString CONTACTS_TABLE_NAME = "contacts";
+static const QString CLIENTS_TABLE_NAME = "clients";
+static const QString CONTRACTS_TABLE_NAME = "contracts";
+static const QString HOST_NAME = "localhost";
+static const QString DATABASE_NAME = "lab_db";
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -29,5 +37,8 @@ private:
     Ui::MainWindow *ui;
     LogInWindow *loginWin;
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
+    QString roleGroup_;
+
+    void showTasksTable();
 };
 #endif // MAINWINDOW_H

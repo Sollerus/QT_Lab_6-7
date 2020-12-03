@@ -52,22 +52,46 @@ bool SingUpDialog::isCorrected(const QString& word){
 }
 
 void SingUpDialog::createUserTry(){
-    if (ui->RolesComboBox->currentText() != ""){
+    bool allCorrect = true;
+    if (ui->firstNameLineEdit->text().isEmpty()){
+        ui->firstNameErrorLabel->show();
+        allCorrect = false;
+    }
+    if (ui->lastNameLineEdit->text().isEmpty()){
+        ui->lastNameErrorLabel->show();
+        allCorrect = false;
+    }
+    if (ui->NewLoginLineEdit->text().isEmpty()){
+        ui->notCorrectLoginLabel->show();
+        allCorrect = false;
+    }
+    if (ui->NewPasswordLabel->text().isEmpty()){
+        ui->notCorrectPasswordLabel->show();
+        allCorrect = false;
+    }
+    if (ui->NewPasswordAgainLineEdit->text().isEmpty()){
+        ui->notCorrectPasswordAgainLabel->show();
+        allCorrect = false;
+    }
+    if (ui->RolesComboBox->currentText().isEmpty()){
+        ui->notSelectedRoleLabel->show();
+        allCorrect = false;
+    }
+    if (allCorrect){
         ui->notSelectedRoleLabel->hide();
         emit addToDatabase(ui->NewLoginLineEdit->text(), ui->NewPasswordLineEdit->text(),
                            ui->RolesComboBox->currentText().toLower(), ui->firstNameLineEdit->text(),
                            ui->lastNameLineEdit->text(), ui->patronymicLineEdit->text());
         emit close();
     }
-    else{
-        ui->notSelectedRoleLabel->show();
-    }
 }
 
 void SingUpDialog::checkingLoginForCorrectness(){
     auto login = ui->NewLoginLineEdit->text();
-    removeSpacesAfterWord(login);
-    ui->NewLoginLineEdit->setText(login);
+    if(!login.isEmpty()){
+        removeSpacesAfterWord(login);
+        ui->NewLoginLineEdit->setText(login);
+    }
     if(login.contains(' ', Qt::CaseInsensitive) || login.isEmpty() || login.length() < 5){
         ui->notCorrectLoginLabel->show();
         ui->buttonBox->setDisabled(true);
@@ -103,23 +127,32 @@ void SingUpDialog::checkingMathchingPasswords(){
 
 void SingUpDialog::checkingFirstNameForCorrectness(){
     auto name = ui->firstNameLineEdit->text();
-    removeSpacesAfterWord(name);
-    ui->firstNameLineEdit->setText(name);
-    if(isCorrected(name)){
-        ui->firstNameErrorLabel->show();
-        ui->buttonBox->setDisabled(true);
+    if(!name.isEmpty()){
+        removeSpacesAfterWord(name);
+        ui->firstNameLineEdit->setText(name);
+        if(isCorrected(name)){
+            ui->firstNameErrorLabel->show();
+            ui->buttonBox->setDisabled(true);
+            return;
+        }
+
     }
     ui->firstNameErrorLabel->hide();
     ui->buttonBox->setEnabled(true);
+
+
 }
 
 void SingUpDialog::checkingLastNameForCorrectness(){
     auto name = ui->lastNameLineEdit->text();
-    removeSpacesAfterWord(name);
-    ui->lastNameLineEdit->setText(name);
-    if(isCorrected(name)){
-        ui->lastNameErrorLabel->show();
-        ui->buttonBox->setDisabled(true);
+    if(!name.isEmpty()){
+        removeSpacesAfterWord(name);
+        ui->lastNameLineEdit->setText(name);
+        if(isCorrected(name)){
+            ui->lastNameErrorLabel->show();
+            ui->buttonBox->setDisabled(true);
+            return;
+        }
     }
     ui->lastNameErrorLabel->hide();
     ui->buttonBox->setEnabled(true);
@@ -133,10 +166,11 @@ void SingUpDialog::checkingPatronymicForCorrectness(){
         if(isCorrected(name)){
             ui->patronymicErrorLabel->show();
             ui->buttonBox->setDisabled(true);
+            return;
         }
-        ui->patronymicErrorLabel->hide();
-        ui->buttonBox->setEnabled(true);
     }
+    ui->patronymicErrorLabel->hide();
+    ui->buttonBox->setEnabled(true);
 
 }
 
