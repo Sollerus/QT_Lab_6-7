@@ -9,17 +9,20 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    changetablefieldsdialog.cpp \
     loginwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     singupdialog.cpp
 
 HEADERS += \
+    changetablefieldsdialog.h \
     loginwindow.h \
     mainwindow.h \
     singupdialog.h
 
 FORMS += \
+    changetablefieldsdialog.ui \
     loginwindow.ui \
     mainwindow.ui \
     singupdialog.ui

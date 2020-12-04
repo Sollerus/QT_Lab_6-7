@@ -18,8 +18,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionLogOut, &QAction::triggered, this, &MainWindow::changeUserAccount);
     connect(ui->actionAddNewUser, &QAction::triggered, this, &MainWindow::createNewUserDialog);
+    //connect(ui->tasksTableWidget, &QTableWidget::cellDoubleClicked, this, &MainWindow::changeFieldValue);
+    connect(ui->tasksTableWidget, &QTableWidget::itemDoubleClicked, this, &MainWindow::changeFieldValue);
 
-    db.setUserName("manager_1");
+    ui->tasksTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    db.setUserName("worker_1");
     db.setPassword("123");
     db.open();
     this->show();
@@ -79,16 +83,16 @@ void MainWindow::createNewUserInDatabase(const QString& login, const QString& pa
     QSqlQuery query;
     query.setForwardOnly(true);
     query.prepare("INSERT INTO employees"
-                  "VALUES (DEFAULT, :first_name, :last_name, :patronymic, :position)");
-    query.bindValue(":first_name", firstName);
-    query.bindValue(":last_name", lastName);
-    query.bindValue(":patronymic", patronymic);
-    query.bindValue(":position", login);
+                  "VALUES (DEFAULT, " + firstName +", " + lastName + ", " + patronymic + ", " + login +")");
+//    query.bindValue(":first_name", firstName);
+//    query.bindValue(":last_name", lastName);
+//    query.bindValue(":patronymic", patronymic);
+//    query.bindValue(":position", login);
     query.exec();
-    query.prepare("CREATE USER :login IN ROLE :role ENCRYPTED PASSWORD :password");
-    query.bindValue(":login", login);
-    query.bindValue(":role", role);
-    query.bindValue(":password", password);
+    query.prepare("CREATE USER " + login + " IN ROLE " + role + " ENCRYPTED PASSWORD " + password);
+//    query.bindValue(":login", login);
+//    query.bindValue(":role", role);
+//    query.bindValue(":password", password);
     query.exec();
 }
 
@@ -107,10 +111,9 @@ void MainWindow::showTasksTable(){
     table->setRowCount(10);
 
     table->setColumnCount(columnCountWithoutId);
-    //table->setVerticalHeaderLabels(QStringList({"name", "last"}));
-    table->setHorizontalHeaderLabels(QStringList({"Task creator", "Task executor", "Contact name", "Description",
-                                                  "Contract id", "Equipment id", "Start date", "End date",
-                                                  "Period of execution", "Priority", "Status"}));
+//    table->setHorizontalHeaderLabels(QStringList({"Task creator", "Task executor", "Contact name", "Description",
+//                                                  "Contract id", "Equipment id", "Start date", "End date",
+//                                                  "Period of execution", "Priority", "Status"}));
 
     sqlQuery.prepare("SELECT e.first_name || ' ' || e.last_name as Creator, e2.first_name || ' ' || e2.last_name as Executor, "
                      "c.first_name || ' ' || c.last_name as Contact, t.description, t.contract, t.equipment_id, "
@@ -125,13 +128,7 @@ void MainWindow::showTasksTable(){
 //    sqlQuery.bindValue(":contacts", CONTACTS_TABLE_NAME);
     sqlQuery.exec();
     unsigned short rowCount{};
-//    qDebug() << sqlQuery.isSelect();
 
-//    sqlQuery.next();
-//    qDebug() << sqlQuery.isValid();
-//    auto x = sqlQuery.result();
-//    qDebug() << sqlQuery.value(0);
-//    qDebug() << sqlQuery.lastQuery();
     while (sqlQuery.next()){
         //table->setRowCount(1 + rowCount);
         for (int i = 0; i < columnCountWithoutId; i++){
@@ -140,10 +137,13 @@ void MainWindow::showTasksTable(){
         }
         ++rowCount;
     }
-
-
 }
 
+void MainWindow::changeFieldValue(QTableWidgetItem* cellTableWidgetItem){
+    qDebug() << cellTableWidgetItem->text();
+    auto qListOfTableWigetItems = ui->tasksTableWidget->selectedItems();
+
+}
 
 
 

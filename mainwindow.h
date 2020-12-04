@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSqlDatabase>
+#include <QTableWidgetItem>
 #include "loginwindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -33,8 +34,11 @@ private slots:
                                  const QString& role, const QString& firstName,
                                  const QString& lastName, const QString& patronymic);
 
+    void changeFieldValue(QTableWidgetItem* cellTableWidget);
+
 private:
     Ui::MainWindow *ui;
+    enum ColumnsIndexes{creatorName, executorName, contactName, description, contractId, equipmentId, startDate, endDate, periodOfExecution, priority, status};
     LogInWindow *loginWin;
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
     QString roleGroup_;
