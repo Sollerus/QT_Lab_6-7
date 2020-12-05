@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "singupdialog.h"
+#include "changetablefieldsdialog.h"
 #include <QSqlQuery>
 #include <QDebug>
 
@@ -44,8 +45,8 @@ bool MainWindow::setDBLoginAndPassword(const QString & login, const QString & pa
                         " FROM pg_user JOIN pg_auth_members ON (pg_user.usesysid=pg_auth_members.member)"
                         " JOIN pg_roles ON (pg_roles.oid=pg_auth_members.roleid) WHERE pg_user.usename=current_user;");
         query.next();
-        qDebug() << query.value(0);
-        if(query.value(0) == "admin"){
+        roleGroup_ = query.value(0).toString();
+        if(roleGroup_ == "admin"){
             qDebug() << "Work";
             ui->actionAddNewUser->setVisible(true);
         }
@@ -142,6 +143,9 @@ void MainWindow::showTasksTable(){
 void MainWindow::changeFieldValue(QTableWidgetItem* cellTableWidgetItem){
     qDebug() << cellTableWidgetItem->text();
     auto qListOfTableWigetItems = ui->tasksTableWidget->selectedItems();
+    ChangeTableFieldsDialog* dialog = new ChangeTableFieldsDialog(&qListOfTableWigetItems, this);
+    connect(dialog, &ChangeTableFieldsDialog::accepted, this, &MainWindow::updateQuery);
+    dialog->exec();
 
 }
 

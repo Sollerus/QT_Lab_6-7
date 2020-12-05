@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QString getRoleGroup() const noexcept {return roleGroup_;}
 
 private slots:
     bool setDBLoginAndPassword(const QString& login, const QString& password);
@@ -35,10 +36,12 @@ private slots:
                                  const QString& lastName, const QString& patronymic);
 
     void changeFieldValue(QTableWidgetItem* cellTableWidget);
+    void updateQuery();
 
 private:
     Ui::MainWindow *ui;
     enum ColumnsIndexes{creatorName, executorName, contactName, description, contractId, equipmentId, startDate, endDate, periodOfExecution, priority, status};
+
     LogInWindow *loginWin;
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
     QString roleGroup_;
