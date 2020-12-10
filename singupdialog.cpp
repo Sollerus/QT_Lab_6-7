@@ -12,6 +12,7 @@ SingUpDialog::SingUpDialog(QWidget *parent) :
     ui->notSelectedRoleLabel->hide();
     ui->firstNameErrorLabel->hide();
     ui->lastNameErrorLabel->hide();
+    ui->patronymicErrorLabel->hide();
 
     ui->RolesComboBox->addItem("admin");
     ui->RolesComboBox->addItem("worker");
@@ -79,10 +80,11 @@ void SingUpDialog::createUserTry(){
     }
     if (allCorrect){
         ui->notSelectedRoleLabel->hide();
-        emit addToDatabase(ui->NewLoginLineEdit->text(), ui->NewPasswordLineEdit->text(),
+        if (emit addToDatabase(ui->NewLoginLineEdit->text(), ui->NewPasswordLineEdit->text(),
                            ui->RolesComboBox->currentText().toLower(), ui->firstNameLineEdit->text(),
-                           ui->lastNameLineEdit->text(), ui->patronymicLineEdit->text());
-        emit close();
+                           ui->lastNameLineEdit->text(), ui->patronymicLineEdit->text())){
+           emit close();
+        }
     }
 }
 
@@ -104,7 +106,7 @@ void SingUpDialog::checkingLoginForCorrectness(){
 
 void SingUpDialog::checkingPasswordForCorrectness(){
     auto password = ui->NewLoginLineEdit->text();
-    if(password.contains(' ', Qt::CaseInsensitive) || password.isEmpty() || password.length() < 8){
+    if(password.contains(" ", Qt::CaseInsensitive) || password.isEmpty() || password.length() < 3){
         ui->notCorrectPasswordLabel->show();
         ui->buttonBox->setDisabled(true);
     }
@@ -139,8 +141,6 @@ void SingUpDialog::checkingFirstNameForCorrectness(){
     }
     ui->firstNameErrorLabel->hide();
     ui->buttonBox->setEnabled(true);
-
-
 }
 
 void SingUpDialog::checkingLastNameForCorrectness(){

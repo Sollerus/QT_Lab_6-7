@@ -31,21 +31,26 @@ private slots:
     bool setDBLoginAndPassword(const QString& login, const QString& password);
     void changeUserAccount();
     void createNewUserDialog();
-    void createNewUserInDatabase(const QString& login, const QString& password,
+    bool createNewUserInDatabase(const QString& login, const QString& password,
                                  const QString& role, const QString& firstName,
-                                 const QString& lastName, const QString& patronymic);
+                                 const QString& lastName, QString patronymic);
 
     void changeFieldValue(QTableWidgetItem* cellTableWidget);
-    void updateQuery();
+    bool createOrUpdateQuery(const QList <QWidget*>& fieldsList, const bool isCreating);
+    void createNewTaskButtonPressed();
+
 
 private:
     Ui::MainWindow *ui;
-    enum ColumnsIndexes{creatorName, executorName, contactName, description, contractId, equipmentId, startDate, endDate, periodOfExecution, priority, status};
-
+    enum ColumnsIndexes{id = 0, creatorName, executorName, contactName, description,
+                        contractId, equipmentId, startDate, endDate,
+                        monthsPeriodOfExecution, daysPeriodOfExecution, hoursPeriodOfExecution,
+                        priority, status, endDateCheckBox, periodCheckBox};
     LogInWindow *loginWin;
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
     QString roleGroup_;
 
-    void showTasksTable();
+    inline int calcColumnCount(QSqlQuery& sqlQuery, const QString& table);
+    void showTable(QTableWidget* table, const QString sqlTableName);
 };
 #endif // MAINWINDOW_H

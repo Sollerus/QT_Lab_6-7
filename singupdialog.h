@@ -26,9 +26,9 @@ private slots:
     void checkingPatronymicForCorrectness();
 
 signals:
-    void addToDatabase(const QString& login, const QString& password,
+    bool addToDatabase(const QString& login, const QString& password,
                        const QString& role, const QString& firstName,
-                       const QString& lastName, const QString& patronymic);
+                       const QString& lastName, QString patronymic);
     void closeDialog();
 
 
