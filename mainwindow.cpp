@@ -57,19 +57,12 @@ bool MainWindow::setDBLoginAndPassword(const QString & login, const QString & pa
         ui->currentRoleLabel->setText(getRoleGroup());
         if(getRoleGroup() == "admin"){
             ui->actionAddNewUser->setVisible(true);
+            ui->newTaskPushButton->setVisible(true);
         }
         else {
             ui->actionAddNewUser->setVisible(false);
+            ui->newTaskPushButton->setVisible(false);
         }
-        if(getRoleGroup() == "worker"){
-
-        }
-//        query.prepare("SELECT count(*) FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'tasks';");
-//        //query.bindValue(":tasks", TASKS_TABLE_NAME);
-//        query.exec();
-//        query.next();
-//       // qDebug() << "hello \"world\"";
-//        qDebug() << query.value(0);
         showTable(ui->tasksTableWidget, TASKS_TABLE_NAME);
         showTable(ui->employeesTableWidget, EMPLOYEES_TABLE_NAME);
         showTable(ui->contactsTableWidget, CONTACTS_TABLE_NAME);
@@ -132,6 +125,7 @@ bool MainWindow::createNewUserInDatabase(const QString& login, const QString& pa
 
 void MainWindow::showTable(QTableWidget* table, const QString sqlTableName){
     QSqlQuery sqlQuery;
+    table->reset();
     sqlQuery.setForwardOnly(true);
     sqlQuery.exec("SELECT count(*) FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" +
                      sqlTableName + "';");

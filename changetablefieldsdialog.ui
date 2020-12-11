@@ -456,7 +456,10 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Task</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
